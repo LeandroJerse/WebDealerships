@@ -4,26 +4,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=search" />
     <title>Document</title>
     <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
     <header>
+        
         <!-- Image logotipo -->
         <img src="assets/img/titulo.png" alt="Logo">
 
         <nav>
             <ul>
-                <li>Home</li>
-                <li>Sign-in/Log-in</li>
-                <li>Contact us</li>
+                <li class="active"><a href="index.html">Home</a></li>
+                <li><a href="cadastro.html">Sign-in/Log-in</a></li>
+                <li><a href="contato.html">Contact us</a></li>
             </ul>
         </nav>
     </header>
     <main>
         <section class="container">
+            <div class="search">
+                <div class="filter">
+                    <select name="marca-carro">
+                        <option value="valor1">Marca 1</option>
+                        <option value="valor2">Opção 2</option>
+                        <option value="valor3">Opção 3</option>
+                    </select>
+                    <select name="modelo-carro">
+                        <option value="valor1">Modelo 1</option>
+                        <option value="valor2">Opção 2</option>
+                        <option value="valor3">Opção 3</option>
+                      </select>
+                      <select name="localizacao-carro">
+                        <option value="valor1">Localização 1</option>
+                        <option value="valor2">Opção 2</option>
+                        <option value="valor3">Opção 3</option>
+                      </select>
+                </div>
+                <label for="busca">Busca</label>
+                <input type="text" id="busca">
+                <button><span class="material-symbols-outlined">search</span></button>
+                
+            </div>
             <h2 class="home-title">Ultimos Anuncios</h2>
+
             <!--  Itens do carrossel  -->
             <div class="list">
 
@@ -34,9 +61,9 @@
                     <div class="content">
                         <p class="car-brand">Marca</p>
                         <h2 class="car-model">Modelo</h2>
-                        <p class="car-description">Descrição</p>
-                        <p class="car-local">Cidade</p>
-                        <button class="read-more">Ler mais </button>
+                        <p class="car-description">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Expedita tenetur adipisci, dolorum aperiam voluptas tempore cum optio ex aliquid fugit sunt eligendi ipsum. Voluptate minus sint accusantium quam, odit reprehenderit?</p>
+                        <p class="car-local">Lorem, ipsum dolor.</p>
+
                     </div>
                 </div>
 

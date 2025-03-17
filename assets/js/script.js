@@ -4,6 +4,10 @@ let container = document.querySelector('.container');
 let items = container.querySelectorAll('.list .item');
 let indicators = document.querySelector('.indicators');
 let dots = indicators.querySelectorAll('ul li');
+let readmore = [];
+items.forEach(item => {
+    readmore.push(item.querySelector('.content .read-more'));
+});
 
 let active = 0;
 let fistPosition = 0;
@@ -41,3 +45,4 @@ leftButton.addEventListener('click', () => {
 
     createDots();
 })
+
