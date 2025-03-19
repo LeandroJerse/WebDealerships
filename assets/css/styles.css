@@ -16,37 +16,36 @@ body {
     color: white;
     font-size: 16px;
     overflow: hidden;
+    display:grid;
+    grid-template-rows: 10% 90% ;
 
 
 }
 
 header {
-    position: fixed;
+
     border: 1px solid #a71666;
     background: linear-gradient(60deg, #e68815 0%, #a71666 100%);
-    width: 100vw;
-    left: 50%;
-    transform: translateX(-50%) translateY(-30%);
-    display: grid;
+    width: 120vw;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
-    ;
-    grid-template-columns: 1fr 1fr;
-    gap: 10%;
 
 
 
     img {
-        transform: translateY(12%);
+
         width: 250px;
+        margin: 0px;
     }
 
     nav {
-        a{
-            text-decoration: none;
-            color: white;
-        }
+        
+
+
         ul {
-            transform: translateY(50%);
+
             display: grid;
             grid-template-columns: 0.8fr 1.2fr 1fr;
             gap: 5px;
@@ -503,6 +502,7 @@ section {
         text-decoration: underline;
     }
 }
+
 .login {
     position: absolute;
     top: 50%;
@@ -560,4 +560,106 @@ section {
     a:hover {
         text-decoration: underline;
     }
+}
+
+.menu {
+    display: none;
+    cursor: pointer;
+    z-index: 500;
+}
+
+
+
+.bar1,
+.bar2,
+.bar3 {
+    width: 2.5rem;
+    height: 0.3rem;
+    background-color:white;
+    margin: 0.5rem 0;
+    transition: 0.5s ease;
+}
+
+.change{
+    display: block;
+}
+
+.change .bar1 {
+    transform: rotate(-45deg) translate(-0.5rem, 0.5rem);
+}
+.change .bar2 {
+    opacity: 0;
+}
+.change .bar3 {
+    transform: rotate(45deg) translate(-0.5rem, -0.5rem);
+}
+
+.nav-responsive {
+    display: none;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+
+
+    nav{
+        display: none;
+
+
+    }
+      
+
+
+    header{
+        display: flex;
+        justify-content: space-between;
+        width: 100vw;
+        
+
+    }
+
+    .menu {
+        display: block;
+        transform: translateX(-100%);
+        justify-content: center;
+
+    }
+    .bar1, .bar2, .bar3{
+        display:block
+    }
+
+    .change .bar1 {
+        transform: rotate(-45deg) translate(-0.6rem, 0.6rem);
+    }
+    .change .bar2 {
+        opacity: 0;
+    }
+    .change .bar3 {
+        transform: rotate(45deg) translate(-0.5rem, -0.5rem);
+    }
+    .change .nav-responsive {
+
+        font-size: 1.2rem;
+        margin: 0.5rem 0;
+
+        
+    }
+}
+
+.spand{
+    display:grid;
+    grid-template-rows: 30% 70% ;
+
+}
+
+.container-menu{
+    display: grid;
+    grid-template:
+     [row1-start]"other"[row1-end]
+     [row2-start]"li li li"[row2-end]
+
 }

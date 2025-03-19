@@ -4,22 +4,17 @@ let container = document.querySelector('.container');
 let items = container.querySelectorAll('.list .item');
 let indicators = document.querySelector('.indicators');
 let dots = indicators.querySelectorAll('ul li');
-let readmore = [];
-items.forEach(item => {
-    readmore.push(item.querySelector('.content .read-more'));
-});
 
 let active = 0;
 let fistPosition = 0;
 let lastPosition = items.length - 1;
-
 
 function removeOldActive() {
     let itemOld = container.querySelector('.list .item.active-item');
     itemOld.classList.remove('active-item');
 }
 
-/*Função que umenta o numero do slide */
+/*Função que aumenta o numero do slide */
 function createDots() {
     let dotsOld = indicators.querySelector('ul li.active');
     dotsOld.classList.remove('active');
@@ -34,7 +29,6 @@ rightButton.addEventListener('click', () => {
     active = active + 1 > lastPosition ? fistPosition : active + 1;
     items[active].classList.add('active-item');
     createDots();
-
 });
 
 leftButton.addEventListener('click', () => {
@@ -44,5 +38,55 @@ leftButton.addEventListener('click', () => {
     items[active].classList.add('active-item');
 
     createDots();
-})
+});
+
+let navigation = document.querySelectorAll('nav ul li');
+let path = ['index.html', 'login.html', 'contato.html'];
+
+navigation.forEach((item, index) => {
+    item.addEventListener('click', () => {
+        window.location.href = path[index];
+    });
+});
+
+const menuHamburguer = document.querySelector('.menu');
+menuHamburguer.addEventListener('click', () => {
+    toggleMenu();
+});
+
+toggleMenu = () => {
+    menuHamburguer.classList.toggle('change');
+    let navigation = document.querySelector('.nav-responsive');
+    navigation.classList.toggle('change');
+    if (navigation.classList.contains('change')) {
+        navigation.style.display = 'block';
+    } else {
+        navigation.style.display = 'none';
+    }
+
+
+    if (document.querySelector('.nav-responsive').classList.contains('change')) {
+        document.body.classList.add('spand');
+    } else {
+        document.body.classList.remove('spand');
+    }
+    
+}
+
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 760) {
+        if (document.body.classList.contains('spand')) {
+            document.body.classList.remove('spand');
+
+            if (menuHamburguer.classList.contains('change')){
+                toggleMenu();
+
+            }
+
+        }
+    }
+});
+
+
 
