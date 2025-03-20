@@ -1,1 +1,1 @@
-just 2 dudes and a tab
+Projeto Final da disciplina Programação para Internet - BCC 2025
