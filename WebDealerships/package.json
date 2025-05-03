@@ -1,0 +1,26 @@
+{
+  "name": "WebDealerships",
+  "version": "1.0.0",
+  "description": "A web application for managing vehicle advertisements.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.10.9",
+    "body-parser": "^1.19.0",
+    "multer": "^1.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "keywords": [
+    "web",
+    "dealership",
+    "advertisement"
+  ],
+  "author": "Your Name",
+  "license": "ISC"
+}
