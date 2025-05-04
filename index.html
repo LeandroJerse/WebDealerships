@@ -1,12 +1,49 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
 
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VrumLx</title>
     <style>
@@ -18,7 +55,6 @@
             font-family: "Montserrat", sans-serif;
             color: #1d1d1f;
         }
-
         ul {
             display: flex;
             flex-wrap: wrap;
@@ -27,18 +63,15 @@
             padding: 0;
             margin: 0;
         }
-
         a {
             text-decoration: none;
             color: #446383;
             font-weight: 500;
             transition: color 0.3s ease;
         }
-
         a:hover {
             color: rgb(45, 150, 255);
         }
-
         header {
             display: flex;
             justify-content: space-between;
@@ -51,35 +84,29 @@
             top: 0;
             z-index: 100;
         }
-
         .logo h1 {
             font-weight: 700;
             font-size: 24px;
             color: #446383;
             margin: 0;
         }
-
         nav {
             margin-top: 0;
         }
-
         nav ul li a {
             font-size: 14px;
             padding: 8px 16px;
             border-radius: 20px;
         }
-
         nav ul li a:hover {
             background-color: rgba(0, 113, 227, 0.1);
         }
-
         main {
             font-family: 'Montserrat', sans-serif;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
-
         .searcher {
             display: flex;
             flex-direction: row;
@@ -88,7 +115,6 @@
             gap: 15px;
             max-width: 800px;
         }
-
         .searcher select {
             padding: 12px 20px;
             border: none;
@@ -104,12 +130,10 @@
             background-size: 12px auto;
             cursor: pointer;
         }
-
         .searcher select:focus {
             outline: none;
             box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.5);
         }
-
         .galeriaCards {
             display: flex;
             flex-wrap: wrap;
@@ -117,7 +141,6 @@
             gap: 30px;
             padding: 20px 0 60px;
         }
-
         .card {
             text-align: start;
             width: calc(33.333% - 20px);
@@ -130,12 +153,10 @@
             display: flex;
             flex-direction: column;
         }
-
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 30px rgba(0, 113, 227, 0.15);
         }
-
         .card .img-carro {
             width: calc(100% - 40px);
             height: 200px;
@@ -145,34 +166,29 @@
             display: block;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.368);
         }
-
         .card h2,
         .card h3 {
             padding: 0 20px;
             margin: 0;
         }
-
         .card h2.marca-carro {
             font-size: 18px;
             font-weight: 600;
             color: #446383;
             margin-top: 20px;
         }
-
         .card h3 {
             font-size: 14px;
             font-weight: 400;
             color: #6e6e73;
             margin-top: 5px;
         }
-
         .card h3.valor-carro {
             font-size: 18px;
             font-weight: 600;
             color: #1d1d1f;
             margin-top: 15px;
         }
-
         .btn-primary {
             background-color: #0071e3;
             border: none;
@@ -184,12 +200,10 @@
             display: block;
             transition: background-color 0.3s ease;
         }
-
         .btn-primary:hover {
             background-color: #0077ed;
             transform: scale(1.03);
         }
-
         @media (max-width: 600px) {
             header {
                 flex-direction: column;
@@ -197,56 +211,46 @@
                 padding: 10px 20px;
                 text-align: center;
             }
-
             .logo h1 {
                 font-size: 22px;
                 margin-bottom: 10px;
             }
-
             nav ul {
                 flex-direction: row;
                 justify-content: center;
                 width: auto;
             }
-
             nav ul li {
                 margin: 0 10px;
             }
-
             nav ul li a {
                 display: inline-block;
                 padding: 10px 15px;
                 border-radius: 20px;
                 transition: background-color 0.3s ease, color 0.3s ease;
             }
-
             nav ul li a:hover {
                 background-color: rgba(0, 113, 227, 0.1);
                 color: #0071e3;
             }
-
             .searcher {
                 flex-direction: column;
                 gap: 10px;
                 padding: 0 20px;
             }
-
             .searcher select {
                 width: 100%;
             }
-
             .galeriaCards {
                 flex-direction: column;
                 gap: 20px;
                 padding: 10px 0 40px;
             }
-
             .card {
                 width: 100%;
                 min-height: 350px;
                 padding: 10px;
             }
-
             .card .img-carro {
                 width: 100%;
                 height: 180px;
@@ -254,13 +258,11 @@
                 margin-top: 10px;
                 margin-bottom: 10px;
             }
-
             .card h2.marca-carro,
             .card h3,
             .card h3.valor-carro {
                 padding: 0 10px;
             }
-
             .btn-primary {
                 width: 100%;
                 padding: 10px;
@@ -268,7 +270,6 @@
         }
     </style>
 </head>
-
 <body>
     <header>
         <div class="logo">
@@ -282,114 +283,117 @@
         </nav>
     </header>
     <main>
-
         <div class="searcher">
             <select id="marca-search" name="marca-search">
-                <option value="marca">marca</option>
+                <option value="">Marca</option>
             </select>
             <select id="modelo-search" name="modelo-search">
-                <option value="modelo">modelo</option>
+                <option value="">Modelo</option>
             </select>
             <select id="local-search" name="local-search">
-                <option value="cidade">cidade</option>
+                <option value="">Cidade</option>
             </select>
         </div>
-
-        <div class="galeriaCards">
-            <div class="card">
-                <h2 class="marca-carro">Toyota</h2>
-                <img src="assets/img/carro1.png" alt="foto" class="img-carro">
-                <h3 class="modelo-carro">Corolla</h3>
-                <h3 class="ano-carro">2022</h3>
-                <h3 class="cidade-carro">São Paulo</h3>
-                <h3 class="valor-carro">R$ 90.000</h3>
-            </div>
-
-            <div class="card">
-                <h2 class="marca-carro">Honda</h2>
-                <img src="assets/img/carro2.png" alt="foto" class="img-carro">
-                <h3 class="modelo-carro">Civic</h3>
-                <h3 class="ano-carro">2021</h3>
-                <h3 class="cidade-carro">Rio de Janeiro</h3>
-                <h3 class="valor-carro">R$ 85.000</h3>
-            </div>
-
-            <div class="card">
-                <h2 class="marca-carro">Ford</h2>
-                <img src="assets/img/carro3.png" alt="foto" class="img-carro">
-                <h3 class="modelo-carro">Focus</h3>
-                <h3 class="ano-carro">2020</h3>
-                <h3 class="cidade-carro">Belo Horizonte</h3>
-                <h3 class="valor-carro">R$ 80.000</h3>
-            </div>
-        </div>
-
+        <div class="galeriaCards" id="galeriaCards"></div>
     </main>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const cards = document.querySelectorAll('.card');
-            const marcaSelect = document.getElementById('marca-search');
-            const modeloSelect = document.getElementById('modelo-search');
-            const localSelect = document.getElementById('local-search');
+        async function fetchData(url, method = 'GET', data = null) {
+            const options = { method };
+            if (data) {
+                options.body = data;
+                options.headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+            }
+            const response = await fetch(url, options);
+            return response.json();
+        }
 
-            const marcas = new Set();
-            const modelos = new Set();
-            const locais = new Set();
-
-            cards.forEach(card => {
-                marcas.add(card.querySelector('.marca-carro').textContent);
-                modelos.add(card.querySelector('.modelo-carro').textContent);
-                locais.add(card.querySelector('.cidade-carro').textContent);
+        function populateSelect(select, options, defaultOption) {
+            select.innerHTML = `<option value="">${defaultOption}</option>`;
+            options.forEach(option => {
+                const opt = document.createElement('option');
+                opt.value = option;
+                opt.textContent = option;
+                select.appendChild(opt);
             });
+        }
 
-            marcas.forEach(marca => {
-                const option = document.createElement('option');
-                option.value = marca;
-                option.textContent = marca;
-                marcaSelect.appendChild(option);
-            });
+        async function loadMarcas() {
+            const data = await fetchData('controller_publico.php?acao=listarMarcas');
+            if (!data.error) {
+                populateSelect(document.getElementById('marca-search'), data, 'Marca');
+            }
+        }
 
-            modelos.forEach(modelo => {
-                const option = document.createElement('option');
-                option.value = modelo;
-                option.textContent = modelo;
-                modeloSelect.appendChild(option);
-            });
+        async function loadModelos(marca) {
+            const formData = new FormData();
+            formData.append('marca', marca);
+            const data = await fetchData('controller_publico.php?acao=listarModelos', 'POST', new URLSearchParams(formData));
+            if (!data.error) {
+                populateSelect(document.getElementById('modelo-search'), data, 'Modelo');
+            }
+        }
 
-            locais.forEach(local => {
-                const option = document.createElement('option');
-                option.value = local;
-                option.textContent = local;
-                localSelect.appendChild(option);
-            });
+        async function loadCidades(marca, modelo) {
+            const formData = new FormData();
+            formData.append('marca', marca);
+            formData.append('modelo', modelo);
+            const data = await fetchData('controller_publico.php?acao=listarCidades', 'POST', new URLSearchParams(formData));
+            if (!data.error) {
+                populateSelect(document.getElementById('local-search'), data, 'Cidade');
+            }
+        }
 
-            function filterCards() {
-                const selectedMarca = marcaSelect.value;
-                const selectedModelo = modeloSelect.value;
-                const selectedLocal = localSelect.value;
-
-                cards.forEach(card => {
-                    const cardMarca = card.querySelector('.marca-carro').textContent;
-                    const cardModelo = card.querySelector('.modelo-carro').textContent;
-                    const cardLocal = card.querySelector('.cidade-carro').textContent;
-
-                    if ((selectedMarca === 'marca' || cardMarca === selectedMarca) &&
-                        (selectedModelo === 'modelo' || cardModelo === selectedModelo) &&
-                        (selectedLocal === 'cidade' || cardLocal === selectedLocal)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
+        async function loadAnuncios() {
+            const marca = document.getElementById('marca-search').value;
+            const modelo = document.getElementById('modelo-search').value;
+            const cidade = document.getElementById('local-search').value;
+            const formData = new FormData();
+            if (marca) formData.append('marca', marca);
+            if (modelo) formData.append('modelo', modelo);
+            if (cidade) formData.append('cidade', cidade);
+            const data = await fetchData('controller_publico.php?acao=listarAnuncios', 'POST', new URLSearchParams(formData));
+            const galeria = document.getElementById('galeriaCards');
+            galeria.innerHTML = '';
+            if (!data.error) {
+                data.forEach(anuncio => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <h2 class="marca-carro">${anuncio.marca}</h2>
+                        <img src="uploads/${anuncio.foto}" alt="foto" class="img-carro">
+                        <h3 class="modelo-carro">${anuncio.modelo}</h3>
+                        <h3 class="ano-carro">${anuncio.ano}</h3>
+                        <h3 class="cidade-carro">${anuncio.cidade}</h3>
+                        <h3 class="valor-carro">R$ ${anuncio.valor}</h3>
+                        <a href="exibicaoDetalhada.html?id=${anuncio.id}" class="btn-primary">Ver Detalhes</a>
+                    `;
+                    galeria.appendChild(card);
                 });
             }
+        }
 
-            marcaSelect.addEventListener('change', filterCards);
-            modeloSelect.addEventListener('change', filterCards);
-            localSelect.addEventListener('change', filterCards);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMarcas();
+            loadAnuncios();
+
+            document.getElementById('marca-search').addEventListener('change', async (e) => {
+                const marca = e.target.value;
+                document.getElementById('modelo-search').innerHTML = '<option value="">Modelo</option>';
+                document.getElementById('local-search').innerHTML = '<option value="">Cidade</option>';
+                if (marca) await loadModelos(marca);
+                loadAnuncios();
+            });
+
+            document.getElementById('modelo-search').addEventListener('change', async (e) => {
+                const marca = document.getElementById('marca-search').value;
+                const modelo = e.target.value;
+                document.getElementById('local-search').innerHTML = '<option value="">Cidade</option>';
+                if (marca && modelo) await loadCidades(marca, modelo);
+                loadAnuncios();
+            });
+
+            document.getElementById('local-search').addEventListener('change', loadAnuncios);
         });
     </script>
-
 </body>
-
 </html>
